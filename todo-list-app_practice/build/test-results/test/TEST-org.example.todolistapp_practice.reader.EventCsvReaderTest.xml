@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.example.todolistapp_practice.reader.EventCsvReaderTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-12-23T23:30:10" hostname="jeongdong-giui-MacBookPro.local" time="0.768">
+  <properties/>
+  <testcase name="reader()" classname="org.example.todolistapp_practice.reader.EventCsvReaderTest" time="0.768"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

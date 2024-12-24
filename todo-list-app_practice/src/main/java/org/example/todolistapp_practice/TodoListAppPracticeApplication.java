@@ -1,13 +1,11 @@
 package org.example.todolistapp_practice;
 
-import org.example.todolistapp_practice.event.Meeting;
-import org.example.todolistapp_practice.event.Schedule;
+import org.example.todolistapp_practice.event.*;
 import org.example.todolistapp_practice.reader.EventCsvReader;
-import org.example.todolistapp_practice.update.UpdateMeeting;
+import org.example.todolistapp_practice.reader.RawCsvReader;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @SpringBootApplication
@@ -16,41 +14,25 @@ public class TodoListAppPracticeApplication {
     public static void main(String[] args) throws IOException {
         Schedule schedule = new Schedule();
 
-        EventCsvReader csvReader = new EventCsvReader();
+        EventCsvReader csvReader = new EventCsvReader(new RawCsvReader());
         String meetingCsvPath = "/data/meeting.csv";
+        String noDisturbanceCsvPath = "/data/no_disturbance.csv";
+        String outOfOfficeCsvPath = "/data/out_of_office.csv";
+        String toDoCsvPath = "/data/to_do.csv";
 
         List<Meeting> meetings = csvReader.readMeetings(meetingCsvPath);
         meetings.forEach(schedule::add);
 
-        Meeting meeting = meetings.get(0);
-        meeting.print();
+        List<NoDisturbance> noDisturbances = csvReader.readNoDisturbance(noDisturbanceCsvPath);
+        noDisturbances.forEach(schedule::add);
 
-        System.out.println("수정 후 ....");
-        meeting.validateAndUpdate(
-                new UpdateMeeting(
-                        "new title",
-                        ZonedDateTime.now(),
-                        ZonedDateTime.now().plusHours(1),
-                        null,
-                        "A",
-                        "new agenda"
-                )
-        );
+        List<OutOfOffice> outOfOffices = csvReader.readOutOfOffice(outOfOfficeCsvPath);
+        outOfOffices.forEach(schedule::add);
 
-        meeting.delete(true);
-        System.out.println("삭제 후 수정 시도 ....");
-        meeting.validateAndUpdate(
-                new UpdateMeeting(
-                        "new title 2",
-                        ZonedDateTime.now(),
-                        ZonedDateTime.now().plusHours(1),
-                        null,
-                        "B",
-                        "new agenda 2"
-                )
-        );
+        List<Todo> todos = csvReader.readTodo(toDoCsvPath);
+        todos.forEach(schedule::add);
 
-        meeting.print();
+        schedule.printAll();
     }
 
 }
